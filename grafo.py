@@ -1,3 +1,9 @@
+import json
+
+def obtener_informacion(archivo):
+    with open('./datos/'+archivo+'.json') as f:
+        return json.load(f)
+
 class Personaje:
     def __init__(self,nombre,id):
         self.nombre = nombre
@@ -24,6 +30,7 @@ class Vertice:
     def __init__(self,id):
         self.id = id
         self.aristas = []
+        self.datos = obtener_informacion(self.id)
 
     def insertar_arista(self,id):
         if id not in self.aristas:
@@ -31,12 +38,15 @@ class Vertice:
 
     def informacion(self):
         print('Tu ubicacion: '+self.id)
+        print(self.datos['descripcion'])
         print('Posibles salidas: ')
         for arista in self.aristas:
             print('->'+arista)
 
 
 if __name__ == "__main__":
+    #TODO: hacer proceso de creacion del grafo
+    print('****Creando Mundo****')
     mundo = Grafo()
     mundo.insertar_vertice('casa')
     mundo.insertar_vertice('puerta')
@@ -50,7 +60,8 @@ if __name__ == "__main__":
     for i in mundo.vertices:
         print(i)
         print(mundo.vertices[i].aristas)
-
+    print('****Fin de Crear Mundo****')
+    #TODO: proceso de creacion de personaje
     personaje = Personaje('Draculinio', 'casa')
     salir = False
     while not salir:
