@@ -36,12 +36,16 @@ class Vertice:
         if id not in self.aristas:
             self.aristas.append(id)
 
-    def informacion(self):
-        print('Tu ubicacion: '+self.id)
+    def informacion(self, propio = True):
+        if propio:
+            print('Tu ubicacion: '+self.id)
+        else:
+            print('Estas viendo: '+self.id)
         print(self.datos['descripcion'])
-        print('Posibles salidas: ')
-        for arista in self.aristas:
-            print('->'+arista)
+        if propio:
+            print('Posibles salidas: ')
+            for arista in self.aristas:
+                print('->'+arista)
 
 
 if __name__ == "__main__":
@@ -81,7 +85,13 @@ if __name__ == "__main__":
                 except IndexError:
                     print('Debe especificar adonde caminar')
             elif comando[0] == 'mirar':
-                mundo.vertices[personaje.ubicacion].informacion()
+                try:
+                    if comando[1] in mundo.vertices[personaje.ubicacion].aristas:
+                        mundo.vertices[comando[1]].informacion(False)
+                    else:
+                        print('No puedes mirar eso')
+                except IndexError:
+                    mundo.vertices[personaje.ubicacion].informacion()
             else:
                 print('Comando no disponible')
             
