@@ -1,13 +1,35 @@
 import json
+import random
 
 def obtener_informacion(archivo):
     with open('./datos/'+archivo+'.json') as f:
         return json.load(f)
 
+#TODO: Agregar inventario (items tienen peso)
 class Personaje:
     def __init__(self,nombre,id):
         self.nombre = nombre
         self.ubicacion = id
+        self.dinero = 0
+        self.nivel = 1
+        self.experiencia = 0 #TODO: manejador de niveles y experiencia
+        self.fuerza = 0
+        self.inteligencia = 0
+        self.constitucion = 0
+
+    def generar_personaje(self):
+        self.dinero = random.randrange(100, 500)
+        self.fuerza = random.randrange(1,10)
+        self.inteligencia = random.randrange(1,10)
+        self.constitucion = random.randrange(1,10)
+
+    def status(self):
+        print('---'+self.nombre+'---')
+        print('>>>>Nivel: '+str(self.nivel)+'('+str(self.experiencia)+')')
+        print('Dinero: '+str(self.dinero))
+        print('Fuerza: '+str(self.fuerza))
+        print('Inteligencia: '+str(self.inteligencia))
+        print('Constitucion: '+str(self.constitucion))
     
     def caminar(self, id):
         self.ubicacion = id
@@ -67,6 +89,7 @@ if __name__ == "__main__":
     print('****Fin de Crear Mundo****')
     #TODO: proceso de creacion de personaje
     personaje = Personaje('Draculinio', 'casa')
+    personaje.generar_personaje()
     salir = False
     while not salir:
         comando = input('>').lower().split()
@@ -92,6 +115,8 @@ if __name__ == "__main__":
                         print('No puedes mirar eso')
                 except IndexError:
                     mundo.vertices[personaje.ubicacion].informacion()
+            elif comando[0] == 'status':
+                personaje.status()
             else:
                 print('Comando no disponible')
             
