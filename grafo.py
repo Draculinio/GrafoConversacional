@@ -1,38 +1,44 @@
 import json
 import random
 
+def guardar_juego(personaje):
+    try:
+        with open('./savegames/savegame.json','w') as f:
+            json.dump(personaje.personaje,f)
+            f.close()
+            print('Juego guardado')
+    except FileNotFoundError:
+        print('Falta el directorio savegame')
+
 def obtener_informacion(archivo):
-    with open('./datos/'+archivo+'.json') as f:
-        return json.load(f)
+    try:
+        with open('./datos/'+archivo+'.json') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print('No se puede encontrar el archivo '+ './datos/'+archivo+'.json')
 
 #TODO: Agregar inventario (items tienen peso)
 class Personaje:
     def __init__(self,nombre,id):
-        self.nombre = nombre
-        self.ubicacion = id
-        self.dinero = 0
-        self.nivel = 1
-        self.experiencia = 0 #TODO: manejador de niveles y experiencia
-        self.fuerza = 0
-        self.inteligencia = 0
-        self.constitucion = 0
+        self.personaje = {'nombre':nombre, 'ubicacion':id, 'dinero':0,'nivel':1, 'experiencia': 0, 'fuerza':0, 'inteligencia':0, 'constitucion':0}
+        
 
     def generar_personaje(self):
-        self.dinero = random.randrange(100, 500)
-        self.fuerza = random.randrange(1,10)
-        self.inteligencia = random.randrange(1,10)
-        self.constitucion = random.randrange(1,10)
+        self.personaje['dinero'] = random.randrange(100, 500)
+        self.personaje['fuerza'] = random.randrange(1,10)
+        self.personaje['inteligencia'] = random.randrange(1,10)
+        self.personaje['constitucion'] = random.randrange(1,10)
 
     def status(self):
-        print('---'+self.nombre+'---')
-        print('>>>>Nivel: '+str(self.nivel)+'('+str(self.experiencia)+')')
-        print('Dinero: '+str(self.dinero))
-        print('Fuerza: '+str(self.fuerza))
-        print('Inteligencia: '+str(self.inteligencia))
-        print('Constitucion: '+str(self.constitucion))
+        print('---'+self.personaje['nombre']+'---')
+        print('>>>>Nivel: '+str(self.personaje['nivel'])+'('+str(self.personaje['experiencia'])+')')
+        print('Dinero: '+str(self.personaje['dinero']))
+        print('Fuerza: '+str(self.personaje['fuerza']))
+        print('Inteligencia: '+str(self.personaje['inteligencia']))
+        print('Constitucion: '+str(self.personaje['constitucion']))
     
     def caminar(self, id):
-        self.ubicacion = id
+        self.personaje['ubicacion'] = id
 
 class Grafo:
     def __init__(self):
@@ -50,7 +56,7 @@ class Grafo:
 
 class Vertice:
     def __init__(self,id):
-        self.id = id
+        self.id = id'./datos/'+archivo+'.json'
         self.aristas = []
         self.datos = obtener_informacion(self.id)
 
@@ -99,9 +105,8 @@ if __name__ == "__main__":
         else:
             if comando[0] == 'caminar':
                 try:
-                    if comando[1] in mundo.vertices[personaje.ubicacion].aristas:
-                        personaje.ubicacion = comando[1]
-                        #personaje.caminar(comando[1])
+                    if comando[1] in mundo.vertices[personaje.personaje['ubicacion']].aristas:
+                        personaje.personaje['ubicacion'] = comando[1]
                         print('Caminando a '+comando[1])
                     else:
                         print('No puedes ir ahi')
@@ -109,14 +114,17 @@ if __name__ == "__main__":
                     print('Debe especificar adonde caminar')
             elif comando[0] == 'mirar':
                 try:
-                    if comando[1] in mundo.vertices[personaje.ubicacion].aristas:
+                    if comando[1] in mundo.vertices[personaje.personaje['ubicacion']].aristas:
                         mundo.vertices[comando[1]].informacion(False)
                     else:
                         print('No puedes mirar eso')
                 except IndexError:
-                    mundo.vertices[personaje.ubicacion].informacion()
+                    mundo.vertices[personaje.personaje['ubicacion']].informacion()
             elif comando[0] == 'status':
                 personaje.status()
+            elif comando[0] == 'save':
+                guardar_juego(personaje)
             else:
                 print('Comando no disponible')
             
+
