@@ -10,12 +10,52 @@ def guardar_juego(personaje):
     except FileNotFoundError:
         print('Falta el directorio savegame')
 
+def cargar_juego():
+    try:
+        with open('./savegames/savegames.json') as f:
+            print('Juego Cargado')
+            return json.load(f)
+    except:
+        print('No esta el archivo de carga')
+
 def obtener_informacion(archivo):
     try:
         with open('./datos/'+archivo+'.json') as f:
             return json.load(f)
     except FileNotFoundError:
         print('No se puede encontrar el archivo '+ './datos/'+archivo+'.json')
+
+
+class Juego:
+    def __init__(self):
+        self.mundo = Grafo()
+        self.personaje = None
+    def comandos(self, comando):
+        if comando[0] == 'caminar':
+            try:
+                if comando[1] in self.mundo.vertices[self.personaje.personaje['ubicacion']].aristas:
+                    self.personaje.personaje['ubicacion'] = comando[1]
+                    print('Caminando a '+comando[1])
+                else:
+                    print('No puedes ir ahi')
+            except IndexError:
+                print('Debe especificar adonde caminar')
+        elif comando[0] == 'mirar':
+            try:
+                if comando[1] in self.mundo.vertices[self.personaje.personaje['ubicacion']].aristas:
+                    self.mundo.vertices[comando[1]].informacion(False)
+                else:
+                    print('No puedes mirar eso')
+            except IndexError:
+                self.mundo.vertices[self.personaje.personaje['ubicacion']].informacion()
+        elif comando[0] == 'status':
+            self.personaje.status()
+        elif comando[0] == 'save':
+            guardar_juego(self.personaje)
+        elif comando[0] == 'load':
+            cargar_juego()
+        else:
+            print('Comando no disponible')
 
 #TODO: Agregar inventario (items tienen peso)
 class Personaje:
@@ -56,7 +96,7 @@ class Grafo:
 
 class Vertice:
     def __init__(self,id):
-        self.id = id'./datos/'+archivo+'.json'
+        self.id = id
         self.aristas = []
         self.datos = obtener_informacion(self.id)
 
@@ -79,23 +119,24 @@ class Vertice:
 if __name__ == "__main__":
     #TODO: hacer proceso de creacion del grafo
     print('****Creando Mundo****')
-    mundo = Grafo()
-    mundo.insertar_vertice('casa')
-    mundo.insertar_vertice('puerta')
-    mundo.insertar_vertice('camino')
-    mundo.insertar_vertice('camino_oeste')
-    mundo.insertar_vertice('camino_este')
-    mundo.insertar_arista('casa','puerta')
-    mundo.insertar_arista('puerta','camino')
-    mundo.insertar_arista('camino','camino_este')
-    mundo.insertar_arista('camino','camino_oeste')
-    for i in mundo.vertices:
+    juego = Juego()
+    juego.mundo.insertar_vertice('casa')
+    juego.mundo.insertar_vertice('puerta')
+    juego.mundo.insertar_vertice('camino')
+    juego.mundo.insertar_vertice('camino_oeste')
+    juego.mundo.insertar_vertice('camino_este')
+    juego.mundo.insertar_arista('casa','puerta')
+    juego.mundo.insertar_arista('puerta','camino')
+    juego.mundo.insertar_arista('camino','camino_este')
+    juego.mundo.insertar_arista('camino','camino_oeste')
+    for i in juego.mundo.vertices:
         print(i)
-        print(mundo.vertices[i].aristas)
+        print(juego.mundo.vertices[i].aristas)
     print('****Fin de Crear Mundo****')
     #TODO: proceso de creacion de personaje
     personaje = Personaje('Draculinio', 'casa')
     personaje.generar_personaje()
+    juego.personaje = personaje
     salir = False
     while not salir:
         comando = input('>').lower().split()
@@ -103,28 +144,4 @@ if __name__ == "__main__":
             print('Gracias por jugar')
             salir = True
         else:
-            if comando[0] == 'caminar':
-                try:
-                    if comando[1] in mundo.vertices[personaje.personaje['ubicacion']].aristas:
-                        personaje.personaje['ubicacion'] = comando[1]
-                        print('Caminando a '+comando[1])
-                    else:
-                        print('No puedes ir ahi')
-                except IndexError:
-                    print('Debe especificar adonde caminar')
-            elif comando[0] == 'mirar':
-                try:
-                    if comando[1] in mundo.vertices[personaje.personaje['ubicacion']].aristas:
-                        mundo.vertices[comando[1]].informacion(False)
-                    else:
-                        print('No puedes mirar eso')
-                except IndexError:
-                    mundo.vertices[personaje.personaje['ubicacion']].informacion()
-            elif comando[0] == 'status':
-                personaje.status()
-            elif comando[0] == 'save':
-                guardar_juego(personaje)
-            else:
-                print('Comando no disponible')
-            
-
+            juego.comandos(comando)
