@@ -1,4 +1,5 @@
 {
     "nombre":"mesa",
-    "descripcion": "Es una mesa de madera normal, un poco de polvo encima, pero nada que un trapo no ACHUSSS!"
+    "descripcion": "Es una mesa de madera normal, un poco de polvo encima, pero nada que un trapo no ACHUSSS!",
+    "tomable":"no"
 }

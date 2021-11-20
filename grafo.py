@@ -33,6 +33,7 @@ class Juego:
                         if self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos[i].datos['nombre'] == comando[1]:
                             encontrado = True
                             self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos[i].informacion()
+                            break
                     if not encontrado:
                         print('No puedes mirar eso')
             except IndexError:
@@ -43,6 +44,19 @@ class Juego:
             self.guardar_juego()
         elif comando[0] == 'load':
             self.personaje.personaje = self.cargar_juego()
+        elif comando[0] == 'tomar':
+            encontrado = False
+            for i in range(0, len(self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos)):
+                if self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos[i].datos['nombre'] == comando[1]:
+                    encontrado = True
+                    if self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos[i].datos['tomable'] == 'si':
+                        self.personaje.elementos.append(self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos[i])
+                        self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos.remove(self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos[i])
+                        print('Tomaste el elemento')
+                    else:
+                        print('No puedes tomar este elemento')
+            if not encontrado:
+                print('No existe el elemento que quieres tomar')
         else:
             print('Comando no disponible')
 
@@ -68,7 +82,7 @@ class Juego:
 class Personaje:
     def __init__(self,nombre,id):
         self.personaje = {'nombre':nombre, 'ubicacion':id, 'dinero':0,'nivel':1, 'experiencia': 0, 'fuerza':0, 'inteligencia':0, 'constitucion':0}
-        
+        self.elementos = []
 
     def generar_personaje(self):
         self.personaje['dinero'] = random.randrange(100, 500)
@@ -83,7 +97,9 @@ class Personaje:
         print('Fuerza: '+str(self.personaje['fuerza']))
         print('Inteligencia: '+str(self.personaje['inteligencia']))
         print('Constitucion: '+str(self.personaje['constitucion']))
-    
+        print('En tu bolsa:')
+        for elemento in self.elementos:
+            print('->'+elemento.datos['nombre'])
     def caminar(self, id):
         self.personaje['ubicacion'] = id
 
@@ -154,7 +170,9 @@ if __name__ == "__main__":
         print(i)
         print(juego.mundo.vertices[i].aristas)
     mesa = Elemento('mesa')
+    espada = Elemento('espada')
     juego.mundo.vertices['casa'].insertar_elemento(mesa)
+    juego.mundo.vertices['casa'].insertar_elemento(espada)
     print('****Fin de Crear Mundo****')
     #TODO: proceso de creacion de personaje
     personaje = Personaje('Draculinio', 'casa')
