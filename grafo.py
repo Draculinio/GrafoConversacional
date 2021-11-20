@@ -28,7 +28,13 @@ class Juego:
                 if comando[1] in self.mundo.vertices[self.personaje.personaje['ubicacion']].aristas:
                     self.mundo.vertices[comando[1]].informacion(False)
                 else:
-                    print('No puedes mirar eso')
+                    encontrado = False
+                    for i in range(0, len(self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos)):
+                        if self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos[i].datos['nombre'] == comando[1]:
+                            encontrado = True
+                            self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos[i].informacion()
+                    if not encontrado:
+                        print('No puedes mirar eso')
             except IndexError:
                 self.mundo.vertices[self.personaje.personaje['ubicacion']].informacion()
         elif comando[0] == 'status':
@@ -127,6 +133,9 @@ class Vertice:
 class Elemento:
     def __init__(self,nombre):
         self.datos = obtener_informacion(nombre)
+
+    def informacion(self):
+        print(self.datos['descripcion'])
 
 if __name__ == "__main__":
     #TODO: hacer proceso de creacion del grafo
