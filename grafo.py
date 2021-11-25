@@ -50,13 +50,18 @@ class Juego:
                 if self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos[i].datos['nombre'] == comando[1]:
                     encontrado = True
                     if self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos[i].datos['tomable'] == 'si':
-                        self.personaje.elementos.append(self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos[i])
+                        self.personaje.personaje['elementos'].append(self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos[i])
                         self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos.remove(self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos[i])
                         print('Tomaste el elemento')
                     else:
                         print('No puedes tomar este elemento')
             if not encontrado:
                 print('No existe el elemento que quieres tomar')
+        elif comando[0] == 'equipar':
+            try:
+                self.personaje.equipar(comando[1])
+            except:
+                print('Debe indicar que equipar')
         else:
             print('Comando no disponible')
 
@@ -81,8 +86,27 @@ class Juego:
 #TODO: Agregar inventario (items tienen peso)
 class Personaje:
     def __init__(self,nombre,id):
-        self.personaje = {'nombre':nombre, 'ubicacion':id, 'dinero':0,'nivel':1, 'experiencia': 0, 'fuerza':0, 'inteligencia':0, 'constitucion':0}
-        self.elementos = []
+        self.personaje = {
+            'nombre':nombre, 
+            'ubicacion':id, 
+            'dinero':0,
+            'nivel':1, 
+            'experiencia': 0, 
+            'fuerza':0, 
+            'inteligencia':0, 
+            'constitucion':0, 
+            'elementos': [],
+            'equipo':{
+                'brazo_derecho': None,
+                'brazo_izquierdo': None,
+                'cabeza': None,
+                'pecho': None,
+                'piernas': None,
+                'anillo_izquierdo': None,
+                'anillo_derecho': None
+            }
+        }
+        
 
     def generar_personaje(self):
         self.personaje['dinero'] = random.randrange(100, 500)
@@ -98,10 +122,36 @@ class Personaje:
         print('Inteligencia: '+str(self.personaje['inteligencia']))
         print('Constitucion: '+str(self.personaje['constitucion']))
         print('En tu bolsa:')
-        for elemento in self.elementos:
-            print('->'+elemento.datos['nombre'])
+        if len(self.personaje['elementos'])==0:
+            print('Bolsa vacia')
+        else:
+            for elemento in self.personaje['elementos']:
+                print('->'+elemento.datos['nombre'])
+        print('Equipo:')
+        for key, value in self.personaje['equipo'].items():
+            if value == None:
+                print(key +': -')
+            else:
+                print(key+": "+value.datos['nombre'])
+    
     def caminar(self, id):
         self.personaje['ubicacion'] = id
+
+    def equipar(self, elemento):
+        encontrado = False
+        for i in range(0,len(self.personaje['elementos'])):
+            if self.personaje['elementos'][i].datos['nombre'] == elemento:
+                encontrado = True
+                if self.personaje['elementos'][i].datos['equipable'] is not 'no':
+                    self.personaje['equipo'][self.personaje['elementos'][i].datos['equipable']] = self.personaje['elementos'][i]
+                    self.personaje['elementos'].remove(self.personaje['elementos'][i])
+                    print('Elemento equipado')
+                    #TODO: desequipar si hay algo equipado y mandarlo a la bolsa de elementos
+                else:
+                    print('No se puede equipar este objeto')
+                break
+        if not encontrado:
+            print('No puede equipar algo que no tiene.')
 
 class Grafo:
     def __init__(self):

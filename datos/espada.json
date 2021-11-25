@@ -1,5 +1,6 @@
 {
     "nombre":"espada",
     "descripcion": "Es una espada normal, de las tipicas que usa el ejercito",
-    "tomable": "si"
+    "tomable": "si",
+    "equipable": "brazo_derecho"
 }
