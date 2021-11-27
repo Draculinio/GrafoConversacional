@@ -1,5 +1,9 @@
 import json
 import random
+import os
+
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 def obtener_informacion(archivo):
     try:
@@ -55,6 +59,7 @@ class Juego:
                         print('Tomaste el elemento')
                     else:
                         print('No puedes tomar este elemento')
+                    break
             if not encontrado:
                 print('No existe el elemento que quieres tomar')
         elif comando[0] == 'equipar':
@@ -89,12 +94,17 @@ class Personaje:
         self.personaje = {
             'nombre':nombre, 
             'ubicacion':id, 
-            'dinero':0,
-            'nivel':1, 
-            'experiencia': 0, 
-            'fuerza':0, 
-            'inteligencia':0, 
-            'constitucion':0, 
+            'status': {
+                'dinero':0,
+                'nivel':1, 
+                'experiencia': 0, 
+                'fuerza':0, 
+                'inteligencia':0, 
+                'constitucion':0,
+                'vida': 0,
+                'vida_maxima': 0
+            },
+            
             'elementos': [],
             'equipo':{
                 'brazo_derecho': None,
@@ -109,18 +119,19 @@ class Personaje:
         
 
     def generar_personaje(self):
-        self.personaje['dinero'] = random.randrange(100, 500)
-        self.personaje['fuerza'] = random.randrange(1,10)
-        self.personaje['inteligencia'] = random.randrange(1,10)
-        self.personaje['constitucion'] = random.randrange(1,10)
-
+        self.personaje['status']['dinero'] = random.randrange(100, 500)
+        self.personaje['status']['fuerza'] = random.randrange(1,10)
+        self.personaje['status']['inteligencia'] = random.randrange(1,10)
+        self.personaje['status']['constitucion'] = random.randrange(1,10)
+        self.personaje['status']['vida'] = self.personaje['status']['vida_maxima'] = random.randrange(50,100)
     def status(self):
         print('---'+self.personaje['nombre']+'---')
-        print('>>>>Nivel: '+str(self.personaje['nivel'])+'('+str(self.personaje['experiencia'])+')')
-        print('Dinero: '+str(self.personaje['dinero']))
-        print('Fuerza: '+str(self.personaje['fuerza']))
-        print('Inteligencia: '+str(self.personaje['inteligencia']))
-        print('Constitucion: '+str(self.personaje['constitucion']))
+        print('>>>>Nivel: '+str(self.personaje['status']['nivel'])+'('+str(self.personaje['status']['experiencia'])+')')
+        print('Vida: '+str(self.personaje['status']['vida'])+'/'+str(self.personaje['status']['vida_maxima']))
+        print('Dinero: '+str(self.personaje['status']['dinero']))
+        print('Fuerza: '+str(self.personaje['status']['fuerza']))
+        print('Inteligencia: '+str(self.personaje['status']['inteligencia']))
+        print('Constitucion: '+str(self.personaje['status']['constitucion']))
         print('En tu bolsa:')
         if len(self.personaje['elementos'])==0:
             print('Bolsa vacia')
@@ -229,6 +240,7 @@ if __name__ == "__main__":
     personaje.generar_personaje()
     juego.personaje = personaje
     salir = False
+    clear()
     while not salir:
         comando = input('>').lower().split()
         if comando[0] == 'salir':

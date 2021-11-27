@@ -11,5 +11,13 @@ Todo el seguimiento diario de lo que sucede en este juego lo pueden encontrar en
 
 ## TODO:
 
-# Crear todo lo que esta en el mundo como un json gigante que cargue
-# Esto sirve para en un futuro hacer un editor de juegos
+Crear todo lo que esta en el mundo como un json gigante que cargue
+Esto sirve para en un futuro hacer un editor de juegos
+
+
+## Como ejecutar: 
+
+- python3 grafo.py (linux)
+- python grafo.py (windows)
+ 
+ En Mac no tengo idea, soy pobre.
