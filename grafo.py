@@ -154,10 +154,11 @@ class Personaje:
             if self.personaje['elementos'][i].datos['nombre'] == elemento:
                 encontrado = True
                 if self.personaje['elementos'][i].datos['equipable'] is not 'no':
+                    if self.personaje['equipo'][self.personaje['elementos'][i].datos['equipable']] is not None:
+                        self.personaje['elementos'].append(self.personaje['equipo'][self.personaje['elementos'][i].datos['equipable']])
                     self.personaje['equipo'][self.personaje['elementos'][i].datos['equipable']] = self.personaje['elementos'][i]
                     self.personaje['elementos'].remove(self.personaje['elementos'][i])
                     print('Elemento equipado')
-                    #TODO: desequipar si hay algo equipado y mandarlo a la bolsa de elementos
                 else:
                     print('No se puede equipar este objeto')
                 break
@@ -230,10 +231,9 @@ if __name__ == "__main__":
     for i in juego.mundo.vertices:
         print(i)
         print(juego.mundo.vertices[i].aristas)
-    mesa = Elemento('mesa')
-    espada = Elemento('espada')
-    juego.mundo.vertices['casa'].insertar_elemento(mesa)
-    juego.mundo.vertices['casa'].insertar_elemento(espada)
+    juego.mundo.vertices['casa'].insertar_elemento(Elemento('mesa'))
+    juego.mundo.vertices['casa'].insertar_elemento(Elemento('espada'))
+    juego.mundo.vertices['casa'].insertar_elemento(Elemento('martillo'))
     print('****Fin de Crear Mundo****')
     #TODO: proceso de creacion de personaje
     personaje = Personaje('Draculinio', 'casa')

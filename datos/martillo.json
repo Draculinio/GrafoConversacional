@@ -1,0 +1,6 @@
+{
+    "nombre":"martillo",
+    "descripcion": "Un buen martillo para un buen carpintero",
+    "tomable": "si",
+    "equipable": "brazo_derecho"
+}
