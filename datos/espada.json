@@ -2,5 +2,8 @@
     "nombre":"espada",
     "descripcion": "Es una espada normal, de las tipicas que usa el ejercito",
     "tomable": "si",
-    "equipable": "brazo_derecho"
+    "equipable": "brazo_derecho",
+    "fuerza": "5",
+    "inteligencia": "0",
+    "constitucion": "0"
 }

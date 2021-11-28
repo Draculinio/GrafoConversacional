@@ -1,0 +1,9 @@
+{
+    "nombre":"botas de cuero",
+    "descripcion": "Estas son tus botas que usas en el dia a dia, practicas para no pincharse los pies",
+    "tomable": "si",
+    "equipable": "piernas",
+    "fuerza": "0",
+    "inteligencia": "0",
+    "constitucion": "1"
+}

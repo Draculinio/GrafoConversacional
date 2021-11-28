@@ -124,14 +124,22 @@ class Personaje:
         self.personaje['status']['inteligencia'] = random.randrange(1,10)
         self.personaje['status']['constitucion'] = random.randrange(1,10)
         self.personaje['status']['vida'] = self.personaje['status']['vida_maxima'] = random.randrange(50,100)
+    
+    def calculo_total(self, status):
+        s = self.personaje['status'][status]
+        for i in self.personaje['equipo'].values():
+            if i is not None:
+                s += int(i.datos[status])
+        return s
+    
     def status(self):
         print('---'+self.personaje['nombre']+'---')
         print('>>>>Nivel: '+str(self.personaje['status']['nivel'])+'('+str(self.personaje['status']['experiencia'])+')')
         print('Vida: '+str(self.personaje['status']['vida'])+'/'+str(self.personaje['status']['vida_maxima']))
         print('Dinero: '+str(self.personaje['status']['dinero']))
-        print('Fuerza: '+str(self.personaje['status']['fuerza']))
-        print('Inteligencia: '+str(self.personaje['status']['inteligencia']))
-        print('Constitucion: '+str(self.personaje['status']['constitucion']))
+        print('Fuerza: '+str(self.calculo_total('fuerza')))
+        print('Inteligencia: '+str(self.calculo_total('inteligencia')))
+        print('Constitucion: '+str(self.calculo_total('constitucion')))
         print('En tu bolsa:')
         if len(self.personaje['elementos'])==0:
             print('Bolsa vacia')
@@ -234,6 +242,7 @@ if __name__ == "__main__":
     juego.mundo.vertices['casa'].insertar_elemento(Elemento('mesa'))
     juego.mundo.vertices['casa'].insertar_elemento(Elemento('espada'))
     juego.mundo.vertices['casa'].insertar_elemento(Elemento('martillo'))
+    juego.mundo.vertices['casa'].insertar_elemento(Elemento('botas_cuero'))
     print('****Fin de Crear Mundo****')
     #TODO: proceso de creacion de personaje
     personaje = Personaje('Draculinio', 'casa')
@@ -242,7 +251,7 @@ if __name__ == "__main__":
     salir = False
     clear()
     while not salir:
-        comando = input('>').lower().split()
+        comando = input('>').lower().split(" ", 1)
         if comando[0] == 'salir':
             print('Gracias por jugar')
             salir = True
