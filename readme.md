@@ -21,3 +21,10 @@ Esto sirve para en un futuro hacer un editor de juegos
 - python grafo.py (windows)
  
  En Mac no tengo idea, soy pobre.
+
+
+ # Comandos:
+
+ - Mirar: Mira lo que hay en el nodo.
+ - Tomar <Objeto>: Toma un objeto.
+ - Equipar <Objeto>: Equipa un objeto.

@@ -2,6 +2,25 @@ import json
 import random
 import os
 
+
+class Colores:
+    black='\033[30m'
+    red='\033[31m'
+    green='\033[32m'
+    orange='\033[33m'
+    blue='\033[34m'
+    purple='\033[35m'
+    cyan='\033[36m'
+    lightgrey='\033[37m'
+    darkgrey='\033[90m'
+    lightred='\033[91m'
+    lightgreen='\033[92m'
+    yellow='\033[93m'
+    lightblue='\033[94m'
+    pink='\033[95m'
+    lightcyan='\033[96m'
+    reset='\033[0m'
+
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -133,25 +152,25 @@ class Personaje:
         return s
     
     def status(self):
-        print('---'+self.personaje['nombre']+'---')
-        print('>>>>Nivel: '+str(self.personaje['status']['nivel'])+'('+str(self.personaje['status']['experiencia'])+')')
-        print('Vida: '+str(self.personaje['status']['vida'])+'/'+str(self.personaje['status']['vida_maxima']))
-        print('Dinero: '+str(self.personaje['status']['dinero']))
-        print('Fuerza: '+str(self.calculo_total('fuerza')))
-        print('Inteligencia: '+str(self.calculo_total('inteligencia')))
-        print('Constitucion: '+str(self.calculo_total('constitucion')))
-        print('En tu bolsa:')
+        print(Colores.blue+'---'+self.personaje['nombre']+'---'+Colores.reset)
+        print(Colores.orange+'>>>>Nivel: '+Colores.reset+str(self.personaje['status']['nivel'])+'('+str(self.personaje['status']['experiencia'])+')')
+        print(Colores.orange+'Vida: '+Colores.reset+str(self.personaje['status']['vida'])+'/'+str(self.personaje['status']['vida_maxima']))
+        print(Colores.orange+'Dinero: '+Colores.reset+str(self.personaje['status']['dinero']))
+        print(Colores.orange+'Fuerza: '+Colores.reset+str(self.calculo_total('fuerza')))
+        print(Colores.orange+'Inteligencia: '+Colores.reset+str(self.calculo_total('inteligencia')))
+        print(Colores.orange+'Constitucion: '+Colores.reset+str(self.calculo_total('constitucion')))
+        print(Colores.blue+'>>>En tu bolsa:'+Colores.reset)
         if len(self.personaje['elementos'])==0:
-            print('Bolsa vacia')
+            print('->Bolsa vacia')
         else:
             for elemento in self.personaje['elementos']:
                 print('->'+elemento.datos['nombre'])
-        print('Equipo:')
+        print(Colores.blue+'>>>Equipo:'+Colores.reset)
         for key, value in self.personaje['equipo'].items():
             if value == None:
-                print(key +': -')
+                print(Colores.orange+'->'+key +': '+Colores.reset+ '-')
             else:
-                print(key+": "+value.datos['nombre'])
+                print(Colores.orange+'->'+key+": "+Colores.reset+value.datos['nombre'])
     
     def caminar(self, id):
         self.personaje['ubicacion'] = id
