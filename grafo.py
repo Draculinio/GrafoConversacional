@@ -152,25 +152,26 @@ class Personaje:
         return s
     
     def status(self):
-        print(Colores.blue+'---'+self.personaje['nombre']+'---'+Colores.reset)
-        print(Colores.orange+'>>>>Nivel: '+Colores.reset+str(self.personaje['status']['nivel'])+'('+str(self.personaje['status']['experiencia'])+')')
-        print(Colores.orange+'Vida: '+Colores.reset+str(self.personaje['status']['vida'])+'/'+str(self.personaje['status']['vida_maxima']))
-        print(Colores.orange+'Dinero: '+Colores.reset+str(self.personaje['status']['dinero']))
-        print(Colores.orange+'Fuerza: '+Colores.reset+str(self.calculo_total('fuerza')))
-        print(Colores.orange+'Inteligencia: '+Colores.reset+str(self.calculo_total('inteligencia')))
-        print(Colores.orange+'Constitucion: '+Colores.reset+str(self.calculo_total('constitucion')))
-        print(Colores.blue+'>>>En tu bolsa:'+Colores.reset)
+        print('{}---{}---{}'.format(Colores.blue,self.personaje['nombre'],Colores.reset))
+        print('{}>>>>Nivel: {}{}({})'.format(Colores.orange,Colores.reset,str(self.personaje['status']['nivel']),str(self.personaje['status']['experiencia'])))
+        print('{}Vida: {}{}/{}'.format(Colores.orange,Colores.reset,str(self.personaje['status']['vida']),str(self.personaje['status']['vida_maxima'])))
+        print('{}Dinero: {}{}'.format(Colores.orange,Colores.reset,str(self.personaje['status']['dinero'])))
+        print('{}Fuerza: {}{}'.format(Colores.orange,Colores.reset,str(self.calculo_total('fuerza'))))
+        print('{}Inteligencia: {}{}'.format(Colores.orange,Colores.reset,str(self.calculo_total('inteligencia'))))
+        print('{}Constitucion: {}{}'.format(Colores.orange,Colores.reset,str(self.calculo_total('constitucion'))))
+        
+        print('{} >>>En tu bolsa: {}'.format(Colores.blue,Colores.reset))
         if len(self.personaje['elementos'])==0:
             print('->Bolsa vacia')
         else:
             for elemento in self.personaje['elementos']:
-                print('->'+elemento.datos['nombre'])
-        print(Colores.blue+'>>>Equipo:'+Colores.reset)
+                print('->{}'.format(elemento.datos['nombre']))
+        print('{} >>>Equipo: {}'.format(Colores.blue,Colores.reset))
         for key, value in self.personaje['equipo'].items():
             if value == None:
-                print(Colores.orange+'->'+key +': '+Colores.reset+ '-')
+                print('{}-> {}: {}-'.format(Colores.orange,key,Colores.reset))
             else:
-                print(Colores.orange+'->'+key+": "+Colores.reset+value.datos['nombre'])
+                print('{}-> {}{}: {}'.format(Colores.orange,key,Colores.reset,value.datos['nombre']))
     
     def caminar(self, id):
         self.personaje['ubicacion'] = id
