@@ -1,0 +1,11 @@
+{
+    "nombre": "Rata",
+    "descripcion": "Una espantosa rata que indica que en el lugar no hay limpieza hace mucho",
+    "dinero":"5",
+    "nivel":"1",
+    "experiencia": "10",
+    "fuerza":"2",
+    "inteligencia":"1",
+    "constitucion":"2",
+    "vida": "10"
+}

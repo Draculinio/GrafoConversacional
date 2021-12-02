@@ -107,7 +107,11 @@ class Juego:
         except:
             print('No esta el archivo de carga')
 
-#TODO: Agregar inventario (items tienen peso)
+class Enemigo:
+    def __init__(self,nombre):
+        self.datos = obtener_informacion(nombre)
+
+#TODO: (items tienen peso)
 class Personaje:
     def __init__(self,nombre,id):
         self.personaje = {
@@ -213,6 +217,7 @@ class Vertice:
         self.aristas = []
         self.datos = obtener_informacion(self.id)
         self.elementos = []
+        self.enemigos = []
         
 
     def insertar_arista(self,id):
@@ -221,18 +226,23 @@ class Vertice:
 
     def insertar_elemento(self, elemento):
         self.elementos.append(elemento)
+
+    def insertar_enemigo(self, enemigo):
+        self.enemigos.append(enemigo)
     
     def informacion(self, propio = True):
         if propio:
-            print('Tu ubicacion: '+self.id)
+            print('Tu ubicacion: {}'.format(self.id))
             print(self.datos['descripcion'])
             for indice in range(len(self.elementos)):
-                print('En el lugar encuentras '+self.elementos[indice].datos['nombre'])
+                print('En el lugar encuentras {}'.format(self.elementos[indice].datos['nombre']))
+            for i in range(len(self.enemigos)):
+                print('Hay un/a {} que quiere matarte'.format(self.enemigos[i].datos['nombre']))
             print('Posibles salidas: ')
             for arista in self.aristas:
-                print('->'+arista)
+                print('-> {}'.format(arista))
         else:
-            print('Estas viendo: '+self.id)
+            print('Estas viendo: {}'.format(self.id))
             print(self.datos['descripcion_lejana'])
 
             
@@ -263,6 +273,8 @@ if __name__ == "__main__":
     juego.mundo.vertices['casa'].insertar_elemento(Elemento('espada'))
     juego.mundo.vertices['casa'].insertar_elemento(Elemento('martillo'))
     juego.mundo.vertices['casa'].insertar_elemento(Elemento('botas_cuero'))
+    juego.mundo.vertices['casa'].insertar_enemigo(Enemigo('rata'))
+    
     print('****Fin de Crear Mundo****')
     #TODO: proceso de creacion de personaje
     personaje = Personaje('Draculinio', 'casa')
