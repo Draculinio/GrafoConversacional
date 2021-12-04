@@ -41,6 +41,8 @@ class Juego:
             try:
                 if comando[1] in self.mundo.vertices[self.personaje.personaje['ubicacion']].aristas:
                     self.personaje.personaje['ubicacion'] = comando[1]
+                    self.personaje.personaje['pasos']+=1
+                    print(self.personaje.personaje['pasos'])
                     print('Caminando a '+comando[1])
                 else:
                     print('No puedes ir ahi')
@@ -48,17 +50,24 @@ class Juego:
                 print('Debe especificar adonde caminar')
         elif comando[0] == 'mirar':
             try:
-                if comando[1] in self.mundo.vertices[self.personaje.personaje['ubicacion']].aristas:
+                encontrado = False
+                if comando[1] in self.mundo.vertices[self.personaje.personaje['ubicacion']].aristas: #Busco aristas
+                    encontrado = True
                     self.mundo.vertices[comando[1]].informacion(False)
-                else:
-                    encontrado = False
+                if not encontrado: #busco elementos
                     for i in range(0, len(self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos)):
                         if self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos[i].datos['nombre'] == comando[1]:
                             encontrado = True
                             self.mundo.vertices[self.personaje.personaje['ubicacion']].elementos[i].informacion()
                             break
-                    if not encontrado:
-                        print('No puedes mirar eso')
+                if not encontrado: #enemigos
+                    for i in range(0, len(self.mundo.vertices[self.personaje.personaje['ubicacion']].enemigos)):
+                        if self.mundo.vertices[self.personaje.personaje['ubicacion']].enemigos[i].datos['nombre'] == comando[1]:
+                            encontrado = True
+                            self.mundo.vertices[self.personaje.personaje['ubicacion']].enemigos[i].informacion()
+                            break
+                if not encontrado:
+                    print('No puedes mirar eso')
             except IndexError:
                 self.mundo.vertices[self.personaje.personaje['ubicacion']].informacion()
         elif comando[0] == 'status':
@@ -102,7 +111,6 @@ class Juego:
         try:
             with open('./savegames/savegame.json') as f:
                 print('Juego Cargado')
-                #self.personaje.personaje = json.load(f)
                 return json.load(f)
         except:
             print('No esta el archivo de carga')
@@ -110,11 +118,15 @@ class Juego:
 class Enemigo:
     def __init__(self,nombre):
         self.datos = obtener_informacion(nombre)
+    
+    def informacion(self):
+        print(self.datos['descripcion'])
 
 #TODO: (items tienen peso)
 class Personaje:
     def __init__(self,nombre,id):
         self.personaje = {
+            'pasos':0,
             'nombre':nombre, 
             'ubicacion':id, 
             'status': {
