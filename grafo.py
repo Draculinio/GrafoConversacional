@@ -37,7 +37,19 @@ class Juego:
         self.mundo = Grafo()
         self.personaje = None
     def comandos(self, comando):
-        if comando[0] == 'caminar':
+        if comando[0] == 'investigar':
+            try:
+                encontrado = False
+                for i in range(0,len(self.mundo.vertices[self.personaje.personaje['ubicacion']].enemigos)):
+                    if comando[1] == self.mundo.vertices[self.personaje.personaje['ubicacion']].enemigos[i].datos['nombre']:
+                        encontrado = True
+                        self.mundo.vertices[self.personaje.personaje['ubicacion']].enemigos[i].status()
+                        break
+                if not encontrado:
+                    print('No puedo investigar eso')
+            except:
+                print('Debes indicar a quien investigar')
+        elif comando[0] == 'caminar':
             try:
                 if comando[1] in self.mundo.vertices[self.personaje.personaje['ubicacion']].aristas:
                     self.personaje.personaje['ubicacion'] = comando[1]
@@ -118,9 +130,18 @@ class Juego:
 class Enemigo:
     def __init__(self,nombre):
         self.datos = obtener_informacion(nombre)
+        self.datos['vida_actual'] = self.datos['vida']
     
     def informacion(self):
         print(self.datos['descripcion'])
+
+    def status(self):
+        print('{}---{}---{}'.format(Colores.blue,self.datos['nombre'],Colores.reset))
+        print('{}>>>>Nivel: {}{}'.format(Colores.orange,Colores.reset,str(self.datos['nivel'])))
+        print('{}Vida: {}{}/{}'.format(Colores.orange,Colores.reset,str(self.datos['vida_actual']),str(self.datos['vida'])))
+        print('{}Fuerza: {}{}'.format(Colores.orange,Colores.reset,str(self.datos['fuerza'])))
+        print('{}Inteligencia: {}{}'.format(Colores.orange,Colores.reset,str(self.datos['inteligencia'])))
+        print('{}Constitucion: {}{}'.format(Colores.orange,Colores.reset,str(self.datos['constitucion'])))
 
 #TODO: (items tienen peso)
 class Personaje:
